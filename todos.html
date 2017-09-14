@@ -1,0 +1,61 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <input 
+                type="text"
+                class="task-input"
+                @keyup.enter="addToDo"
+                v-model="todo"
+                placeholder="例如：吃饭睡觉打豆豆；   提示：+回车即可添加任务"
+        >
+        <ul class="task-count" v-show="!items.length==0">
+            <li>
+                {{noCheckeLength}}个任务未完成
+            </li>
+            <li class="action">
+                <a href="#all" :class="{active:currentHash=='all'}">所有任务</a>
+                <a href="#unfinished" :class="{active:currentHash=='unfinished'}">未完成的任务</a>
+                <a href="#finished" :class="{active:currentHash=='finished'}">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+            <span class="no-task-tip" v-show="items.length==0">还没有添加任何任务</span>
+            <ul class="todo-list">
+                <li class="todo" v-for="item in filterItems" :class="{completed:item.check,editing:item===currentToDo}">
+                    <div class="view">
+                        <input type="checkbox" class="toggle" v-model="item.check">
+                        <label @dblclick="editToDo(item)">{{item.title}}</label>
+                        <button class="destroy" @click="deleteTo(item)"></button>
+                    </div>
+                    <input
+                            type="text"
+                            class="edit"
+                            v-model="item.title"
+                            @keyup.enter="editCompleted(item)"
+                            @blur="editCompleted(item)"
+                            @keyup.esc="cancleEdit(item)"
+                            v-focus="currentToDo===item"
+                    >
+                </li>
+            </ul>
+        </div>
+        <!--<div>{{filterItems}}</div>-->
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="todos.js"></script>
+</body>
+</html>
